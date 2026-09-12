@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulsar-consumer
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pulsar-consumer
+  template:
+    metadata:
+      labels:
+        app: pulsar-consumer
+    spec:
+      containers:
+        - name: pulsar-consumer
+          image: pulsar-consumer:latest
+          imagePullPolicy: Never
+          env:
+            - name: SPRING_PULSAR_CLIENT_SERVICE_URL
+              value: pulsar://pulsar:6650

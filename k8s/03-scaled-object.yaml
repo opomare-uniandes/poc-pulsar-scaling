@@ -1,0 +1,18 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: pulsar-consumer-scaler
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: pulsar-consumer
+  minReplicaCount: 0
+  maxReplicaCount: 10
+  cooldownPeriod: 30
+  triggers:
+    - type: apache-pulsar
+      metadata:
+        adminURL: http://pulsar:8080
+        topic: persistent://public/default/hello-pulsar-topic
+        subscription: hello-pulsar-sub
+        msgBacklogThreshold: "10"

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulsar-publisher
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pulsar-publisher
+  template:
+    metadata:
+      labels:
+        app: pulsar-publisher
+    spec:
+      containers:
+        - name: pulsar-publisher
+          image: pulsar-publisher:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PULSAR_CLIENT_SERVICE_URL
+              value: pulsar://pulsar:6650
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pulsar-publisher
+  namespace: default
+spec:
+  selector:
+    app: pulsar-publisher
+  ports:
+    - port: 8080
+      targetPort: 8080
